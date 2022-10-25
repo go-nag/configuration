@@ -1,0 +1,30 @@
+name: Test run
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.18.3'
+
+      - name: Setup mockgen
+        run: go install github.com/golang/mock/mockgen@v1.6.0
+
+      - name: Run tests
+        run: |
+          make clean-prepare
+          make test
