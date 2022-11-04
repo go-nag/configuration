@@ -20,7 +20,12 @@ func GetEnv(variableName string) (string, error) {
 }
 
 func GetEnvOrDefault(variableName string, defaultValue string) string {
-	return "not implemented"
+	variable := os.Getenv(variableName)
+
+	if len(variable) == 0 {
+		return defaultValue
+	}
+	return variable
 }
 
 func GetEnvInt(variableName string) (int, error) {
