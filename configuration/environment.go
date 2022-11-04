@@ -2,6 +2,8 @@ package configuration
 
 import (
 	"errors"
+	"fmt"
+	"os"
 )
 
 var (
@@ -9,7 +11,12 @@ var (
 )
 
 func GetEnv(variableName string) (string, error) {
-	return "", errors.New("not implemented")
+	variable := os.Getenv(variableName)
+
+	if len(variable) == 0 {
+		return "", errors.New(fmt.Sprintf("%s - %s", variableName, notFoundErrorMessage))
+	}
+	return variable, nil
 }
 
 func GetEnvOrDefault(variableName string, defaultValue string) string {
