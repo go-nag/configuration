@@ -63,9 +63,33 @@ func GetEnvIntOrDefault(variableName string, defaultValue int) int {
 }
 
 func GetEnvBool(variableName string) (bool, error) {
-	return false, errors.New("not implemented")
+	variable := os.Getenv(variableName)
+
+	if len(variable) == 0 {
+		return false, errors.New(fmt.Sprintf("%s - %s", variableName, notFoundErrorMessage))
+	}
+
+	boolVariable, err := strconv.ParseBool(variable)
+
+	if err != nil {
+		return false, errors.New(fmt.Sprintf("%s - %s [%s]", variableName, notParsableErrorMessage, err.Error()))
+	}
+
+	return boolVariable, nil
 }
 
 func GetEnvBoolOrDefault(variableName string, defaultValue bool) bool {
-	return false
+	variable := os.Getenv(variableName)
+
+	if len(variable) == 0 {
+		return defaultValue
+	}
+
+	boolVariable, err := strconv.ParseBool(variable)
+
+	if err != nil {
+		return defaultValue
+	}
+
+	return boolVariable
 }
