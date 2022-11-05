@@ -47,7 +47,19 @@ func GetEnvInt(variableName string) (int, error) {
 }
 
 func GetEnvIntOrDefault(variableName string, defaultValue int) int {
-	return -1
+	variable := os.Getenv(variableName)
+
+	if len(variable) == 0 {
+		return defaultValue
+	}
+
+	intVariable, err := strconv.Atoi(variable)
+
+	if err != nil {
+		return defaultValue
+	}
+
+	return intVariable
 }
 
 func GetEnvBool(variableName string) (bool, error) {
