@@ -140,3 +140,83 @@ func TestGetEnvIntOrDefault(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestGetEnvBool(t *testing.T) {
+	configuration_loader.LoadEnvFile("../.env.example")
+	t.Log("When using GetEnvBool")
+	{
+		t.Log("\tWhen variable present")
+		{
+			t.Log("\t\tWhen variable not parsable")
+			{
+				t.Logf("\t\t\tShould return '%s' error message", notParsableErrorMessage)
+				{
+					variable, err := GetEnvBool("TEST_BOOL_CORRUPTED")
+
+					assert.NotNil(t, err)
+					assert.True(t, strings.Contains(err.Error(), fmt.Sprintf("TEST_BOOL_CORRUPTED - %s", notParsableErrorMessage)), err.Error())
+					assert.Equal(t, false, variable)
+				}
+			}
+			t.Log("\t\tWhen variable parsable")
+			{
+				t.Log("\t\t\tShould return variable")
+				{
+					variable, err := GetEnvBool("TEST_BOOL")
+
+					assert.Nil(t, err)
+					assert.Equal(t, true, variable)
+				}
+			}
+		}
+		t.Log("\tWhen variable not present")
+		{
+			t.Logf("\t\tShould return '%s' error", notFoundErrorMessage)
+			{
+				variable, err := GetEnvBool("TEST_BOOL_NOT_PRESENT")
+
+				assert.NotNil(t, err)
+				assert.Equal(t, fmt.Sprintf("TEST_BOOL_NOT_PRESENT - %s", notFoundErrorMessage), err.Error())
+				assert.Equal(t, false, variable)
+			}
+		}
+	}
+}
+
+func TestGetEnvBoolOrDefault(t *testing.T) {
+	configuration_loader.LoadEnvFile("../.env.example")
+	t.Log("When using GetEnvBoolOrDefault")
+	{
+		t.Log("\tWhen variable present")
+		{
+			t.Log("\t\tWhen variable not parsable")
+			{
+				t.Log("\t\t\tShould return default value")
+				{
+					variable := GetEnvBoolOrDefault("TEST_BOOL_CORRUPTED", true)
+
+					assert.Equal(t, true, variable)
+				}
+			}
+			t.Log("\t\tWhen variable parsable")
+			{
+				t.Log("\t\t\tShould return variable")
+				{
+					variable := GetEnvBoolOrDefault("TEST_BOOL", false)
+
+					assert.Equal(t, true, variable)
+				}
+			}
+		}
+		t.Log("\tWhen variable not present")
+		{
+			t.Log("\t\t\tShould return default value")
+			{
+				variable := GetEnvBoolOrDefault("TEST_BOOL_NOT_PRESENT", true)
+
+				assert.Equal(t, true, variable)
+			}
+		}
+	}
+}
