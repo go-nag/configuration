@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/pavleprica/configuration/configuration_loader"
 	"github.com/stretchr/testify/assert"
+	"strings"
 	"testing"
 )
 
@@ -73,9 +74,9 @@ func TestGetEnvInt(t *testing.T) {
 				t.Logf("\t\t\tShould return '%s' error message", notParsableErrorMessage)
 				{
 					variable, err := GetEnvInt("TEST_INT_CORRUPTED")
-
+					
 					assert.NotNil(t, err)
-					assert.Equal(t, fmt.Sprintf("TEST_INT_CORRUPTED - %s", notParsableErrorMessage), err.Error())
+					assert.True(t, strings.Contains(err.Error(), fmt.Sprintf("TEST_INT_CORRUPTED - %s", notParsableErrorMessage)), err.Error())
 					assert.Equal(t, 0, variable)
 				}
 			}
@@ -94,7 +95,7 @@ func TestGetEnvInt(t *testing.T) {
 		{
 			t.Logf("\t\tShould return '%s' error", notFoundErrorMessage)
 			{
-				variable, err := GetEnvInt("TEST_INT_NOT_RESENT")
+				variable, err := GetEnvInt("TEST_INT_NOT_PRESENT")
 
 				assert.NotNil(t, err)
 				assert.Equal(t, fmt.Sprintf("TEST_INT_NOT_PRESENT - %s", notFoundErrorMessage), err.Error())

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 var (
@@ -30,7 +31,19 @@ func GetEnvOrDefault(variableName string, defaultValue string) string {
 }
 
 func GetEnvInt(variableName string) (int, error) {
-	return -1, errors.New("not implemented")
+	variable := os.Getenv(variableName)
+
+	if len(variable) == 0 {
+		return 0, errors.New(fmt.Sprintf("%s - %s", variableName, notFoundErrorMessage))
+	}
+
+	intVariable, err := strconv.Atoi(variable)
+
+	if err != nil {
+		return 0, errors.New(fmt.Sprintf("%s - %s [%s]", variableName, notParsableErrorMessage, err.Error()))
+	}
+
+	return intVariable, nil
 }
 
 func GetEnvIntOrDefault(variableName string, defaultValue int) int {
