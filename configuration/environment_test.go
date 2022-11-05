@@ -115,7 +115,7 @@ func TestGetEnvIntOrDefault(t *testing.T) {
 			{
 				t.Log("\t\t\tShould return default value")
 				{
-					variable := GetEnvIntOrDefault("TEST_INT_NOT_PRESENT", 5)
+					variable := GetEnvIntOrDefault("TEST_INT_CORRUPTED", 5)
 
 					assert.Equal(t, 5, variable)
 				}
@@ -134,10 +134,9 @@ func TestGetEnvIntOrDefault(t *testing.T) {
 		{
 			t.Log("\t\t\tShould return default value")
 			{
-				variable := GetEnvIntOrDefault("TEST_INT_CORRUPTED", 5)
+				variable := GetEnvIntOrDefault("TEST_INT_NOT_PRESENT", 5)
 
 				assert.Equal(t, 5, variable)
 			}
 		}
 	}
-}
