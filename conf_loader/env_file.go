@@ -1,4 +1,4 @@
-package configuration_loader
+package conf_loader
 
 import (
 	"fmt"
