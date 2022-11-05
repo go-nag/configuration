@@ -74,7 +74,7 @@ func TestGetEnvInt(t *testing.T) {
 				t.Logf("\t\t\tShould return '%s' error message", notParsableErrorMessage)
 				{
 					variable, err := GetEnvInt("TEST_INT_CORRUPTED")
-					
+
 					assert.NotNil(t, err)
 					assert.True(t, strings.Contains(err.Error(), fmt.Sprintf("TEST_INT_CORRUPTED - %s", notParsableErrorMessage)), err.Error())
 					assert.Equal(t, 0, variable)
@@ -100,6 +100,43 @@ func TestGetEnvInt(t *testing.T) {
 				assert.NotNil(t, err)
 				assert.Equal(t, fmt.Sprintf("TEST_INT_NOT_PRESENT - %s", notFoundErrorMessage), err.Error())
 				assert.Equal(t, 0, variable)
+			}
+		}
+	}
+}
+
+func TestGetEnvIntOrDefault(t *testing.T) {
+	configuration_loader.LoadEnvFile("../.env.example")
+	t.Log("When using GetEnvIntOrDefault")
+	{
+		t.Log("\tWhen variable present")
+		{
+			t.Log("\t\tWhen variable not parsable")
+			{
+				t.Log("\t\t\tShould return default value")
+				{
+					variable := GetEnvIntOrDefault("TEST_INT_NOT_PRESENT", 5)
+
+					assert.Equal(t, 5, variable)
+				}
+			}
+			t.Log("\t\tWhen variable parsable")
+			{
+				t.Log("\t\t\tShould return variable")
+				{
+					variable := GetEnvIntOrDefault("TEST_INT", 5)
+
+					assert.Equal(t, 1234, variable)
+				}
+			}
+		}
+		t.Log("\tWhen variable not present")
+		{
+			t.Log("\t\t\tShould return default value")
+			{
+				variable := GetEnvIntOrDefault("TEST_INT_CORRUPTED", 5)
+
+				assert.Equal(t, 5, variable)
 			}
 		}
 	}
