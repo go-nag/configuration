@@ -2,13 +2,13 @@ package configuration
 
 import (
 	"fmt"
-	"github.com/pavleprica/configuration/loader"
+	"github.com/pavleprica/configuration/configuration_loader"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestGetEnv(t *testing.T) {
-	loader.LoadEnvFile("../.env.example")
+	configuration_loader.LoadEnvFile("../.env.example")
 	t.Log("When using GetEnv")
 	{
 		t.Log("\tWhen variable present")
@@ -36,7 +36,7 @@ func TestGetEnv(t *testing.T) {
 }
 
 func TestGetEnvOrDefault(t *testing.T) {
-	loader.LoadEnvFile("../.env.example")
+	configuration_loader.LoadEnvFile("../.env.example")
 	t.Log("When using GetEnvOrDefault")
 	{
 		t.Log("\tWhen variable present")
