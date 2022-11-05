@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	notFoundErrorMessage string = "variable not found"
+	notFoundErrorMessage    = "variable not found"
+	notParsableErrorMessage = "variable not parsable"
 )
 
 func GetEnv(variableName string) (string, error) {
