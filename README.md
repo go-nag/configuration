@@ -82,7 +82,7 @@ fmt.Println(variable)
 ```go
 // Fetches the environment variable named TEST_BOOL
 // in addition to that it parses it to bool value
-variable, err := GetEnvInt("TEST_BOOL")
+variable, err := GetEnvBool("TEST_BOOL")
 if err != nil {
 	log.Fatalln(err)
 }
