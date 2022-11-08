@@ -12,6 +12,8 @@ var (
 	notParsableErrorMessage = "variable not parsable"
 )
 
+// GetEnv returns a string value of the environment variable name provided.
+// It returns an error in the event of the variable not existing.
 func GetEnv(variableName string) (string, error) {
 	variable := os.Getenv(variableName)
 
@@ -21,6 +23,8 @@ func GetEnv(variableName string) (string, error) {
 	return variable, nil
 }
 
+// GetEnvOrDefault returns a string value of the environment variable name provided.
+// In case there is an error, or the variable doesn't exist, it will return the default provided value.
 func GetEnvOrDefault(variableName string, defaultValue string) string {
 	variable := os.Getenv(variableName)
 
@@ -30,6 +34,8 @@ func GetEnvOrDefault(variableName string, defaultValue string) string {
 	return variable
 }
 
+// GetEnvInt returns an int value of the environment variable name provided.
+// It returns an error in the event of the variable not existing or parsing error.
 func GetEnvInt(variableName string) (int, error) {
 	variable := os.Getenv(variableName)
 
@@ -46,6 +52,8 @@ func GetEnvInt(variableName string) (int, error) {
 	return intVariable, nil
 }
 
+// GetEnvIntOrDefault returns an int value of the environment variable name provided.
+// In case there is an error, or the variable doesn't exist, it will return the default provided value.
 func GetEnvIntOrDefault(variableName string, defaultValue int) int {
 	variable := os.Getenv(variableName)
 
@@ -62,6 +70,8 @@ func GetEnvIntOrDefault(variableName string, defaultValue int) int {
 	return intVariable
 }
 
+// GetEnvBool returns a bool value of the environment variable name provided.
+// It returns an error in the event of the variable not existing or parsing error.
 func GetEnvBool(variableName string) (bool, error) {
 	variable := os.Getenv(variableName)
 
@@ -78,6 +88,8 @@ func GetEnvBool(variableName string) (bool, error) {
 	return boolVariable, nil
 }
 
+// GetEnvBoolOrDefault returns a bool value of the environment variable name provided.
+// In case there is an error, or the variable doesn't exist, it will return the default provided value.
 func GetEnvBoolOrDefault(variableName string, defaultValue bool) bool {
 	variable := os.Getenv(variableName)
 
