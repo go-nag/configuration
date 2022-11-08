@@ -1,6 +1,9 @@
 package cfg_m
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 var (
 	configurationValueNotFoundMessage = "configuration value not found"
@@ -28,7 +31,12 @@ type Manager struct {
 }
 
 func (m *Manager) Get(configurationName string) (string, error) {
-	return "", errors.New("not implemented")
+	cfgValue, present := m.loadedConfiguration[configurationName]
+	if present {
+		return cfgValue, nil
+	} else {
+		return "", errors.New(fmt.Sprintf("%s - %s", configurationName, configurationValueNotFoundMessage))
+	}
 }
 
 func (m *Manager) GetOrDefault(configurationName string, defaultValue string) string {
