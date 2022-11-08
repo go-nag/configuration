@@ -1,0 +1,8 @@
+database:
+  host: http://localhost:5042
+  username: user
+  password: my-secret-pw
+
+kafka:
+  url: http://localhost:5555
+  clientId: localApp

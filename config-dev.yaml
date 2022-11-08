@@ -1,0 +1,8 @@
+database:
+  host: http://remote-database:5042
+  username: ${DATABASE_USERNAME}
+  password: ${DATABASE_PASSWORD}
+
+kafka:
+  url: http://remote-kafka:5555
+  clientId: ${KAFKA_CLIENT_ID}
