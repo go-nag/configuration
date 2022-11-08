@@ -1,6 +1,10 @@
-package conf
+package cfg_m
 
 import "errors"
+
+var (
+	configurationValueNotFoundMessage = "configuration value not found"
+)
 
 // ConfigStringGetter is responsible for allowing getting of loaded configuration from the implemented types.
 type ConfigStringGetter interface {
