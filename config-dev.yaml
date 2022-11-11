@@ -8,3 +8,7 @@ kafka:
   clientId: ${KAFKA_CLIENT_ID}
 
 something: wow
+
+number: "7000"
+
+boolean: "true"

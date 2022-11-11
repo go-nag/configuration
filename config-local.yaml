@@ -8,3 +8,7 @@ kafka:
   clientId: localApp
 
 something: wow
+
+number: "7000"
+
+boolean: "true"
