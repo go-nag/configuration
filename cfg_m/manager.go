@@ -46,5 +46,10 @@ func (m *Manager) Get(configurationName string) (string, error) {
 }
 
 func (m *Manager) GetOrDefault(configurationName string, defaultValue string) string {
-	return ""
+	cfgValue, present := m.loadedConfiguration[configurationName]
+	if present {
+		return cfgValue
+	} else {
+		return defaultValue
+	}
 }
