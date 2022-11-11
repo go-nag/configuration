@@ -6,3 +6,5 @@ database:
 kafka:
   url: http://remote-kafka:5555
   clientId: ${KAFKA_CLIENT_ID}
+
+something: wow
