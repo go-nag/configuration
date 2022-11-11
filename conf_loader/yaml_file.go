@@ -2,17 +2,58 @@ package conf_loader
 
 import (
 	"errors"
+	"fmt"
+	"github.com/pavleprica/configuration/cfg_e"
 	"github.com/pavleprica/configuration/cfg_m"
+	"gopkg.in/yaml.v3"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 var (
 	configFileNotFound = "configuration file not found"
+	configTestRunKey   = "CONFIGURATION_TEST_RUN"
 )
 
 // LoadConfigFile will take the `config-<environment>.yaml` file and
 // provide the configuration manager allowing access to configuration data.
 func LoadConfigFile(environment string) (*cfg_m.Manager, error) {
-	return nil, errors.New("not implemented")
+	fmt.Printf("Loading config-%s.yaml\n", environment)
+
+	workDir, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+
+	configFilePath := getConfigFilePath(environment, workDir)
+	fileContent, err := os.ReadFile(configFilePath)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil, errors.New(fmt.Sprintf("%s - %s", configFileNotFound, configFilePath))
+		}
+		return nil, err
+	}
+
+	var unmarshalledFileContent interface{}
+	err = yaml.Unmarshal(fileContent, &unmarshalledFileContent)
+	if err != nil {
+		return nil, err
+	}
+
+	configuration := make(map[string]string)
+	unmarshalYamlContent("", unmarshalledFileContent, configuration)
+	populateConfigurationWithEnvironmentVariables(configuration)
+
+	return cfg_m.NewManager(configuration), nil
+}
+
+func getConfigFilePath(environment string, workDir string) string {
+	if cfg_e.GetEnvBoolOrDefault(configTestRunKey, false) {
+		return filepath.Join(workDir, "..", fmt.Sprintf("config-%s.yaml", environment))
+	} else {
+		return filepath.Join(workDir, fmt.Sprintf("config-%s.yaml", environment))
+	}
 }
 
 func unmarshalYamlContent(objectBase string, yamlContent interface{}, configuration map[string]string) {
@@ -37,5 +78,14 @@ func unmarshalYamlContent(objectBase string, yamlContent interface{}, configurat
 	default:
 		fmt.Println("Unsupported type")
 		fmt.Println(value)
+	}
+}
+
+func populateConfigurationWithEnvironmentVariables(configuration map[string]string) {
+	for k, v := range configuration {
+		if strings.HasPrefix(v, "${") && strings.HasSuffix(v, "}") {
+			envName := v[2 : len(v)-1]
+			configuration[k] = cfg_e.GetEnvOrDefault(envName, "")
+		}
 	}
 }
