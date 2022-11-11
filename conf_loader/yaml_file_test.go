@@ -103,6 +103,14 @@ func validateLocalConfigFileValues(t *testing.T, manager *cfg_m.Manager) {
 	assert.Nil(t, err)
 	assert.Equal(t, "wow", v)
 
+	v, err = manager.Get("number")
+	assert.Nil(t, err)
+	assert.Equal(t, "7000", v)
+
+	v, err = manager.Get("boolean")
+	assert.Nil(t, err)
+	assert.Equal(t, "true", v)
+
 	v, err = manager.Get("not.existing")
 	assert.True(t, len(v) == 0)
 	assert.NotNil(t, err)
@@ -133,6 +141,14 @@ func validateDevConfigFileValues(t *testing.T, manager *cfg_m.Manager) {
 	v, err = manager.Get("something")
 	assert.Nil(t, err)
 	assert.Equal(t, "wow", v)
+
+	v, err = manager.Get("number")
+	assert.Nil(t, err)
+	assert.Equal(t, "7000", v)
+
+	v, err = manager.Get("boolean")
+	assert.Nil(t, err)
+	assert.Equal(t, "true", v)
 
 	v, err = manager.Get("not.existing")
 	assert.True(t, len(v) == 0)
