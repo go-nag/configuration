@@ -16,21 +16,26 @@ func LoadConfigFile(environment string) (*cfg_m.Manager, error) {
 }
 
 func unmarshalYamlContent(objectBase string, yamlContent interface{}, configuration map[string]string) {
-	v := reflect.ValueOf(yamlContent)
+	switch value := yamlContent.(type) {
+	case map[string]interface{}:
+		for k, v := range value {
+			var base string
+			if len(objectBase) == 0 {
+				base = k
+			} else {
+				base = fmt.Sprintf("%s.%s", objectBase, k)
+			}
 
-	for _, key := range v.MapKeys() {
-		var base string
-		if len(objectBase) == 0 {
-			base = key.String()
-		} else {
-			base = fmt.Sprintf("%s.%s", objectBase, key)
-		}
-		value := v.MapIndex(key)
+			strValue, ok := v.(string)
 
-		if value.Kind() == reflect.Map {
-			unmarshalYamlContent(base, value.Interface(), configuration)
-		} else {
-			configuration[base] = value.String()
+			if ok {
+				configuration[base] = strValue
+			} else {
+				unmarshalYamlContent(base, v, configuration)
+			}
 		}
+	default:
+		fmt.Println("Unsupported type")
+		fmt.Println(value)
 	}
 }
