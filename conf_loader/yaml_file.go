@@ -3,8 +3,8 @@ package conf_loader
 import (
 	"errors"
 	"fmt"
-	"github.com/pavleprica/configuration/cfg_e"
-	"github.com/pavleprica/configuration/cfg_m"
+	"github.com/go-nag/configuration/cfg_e"
+	"github.com/go-nag/configuration/cfg_m"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
