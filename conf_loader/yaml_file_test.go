@@ -123,22 +123,3 @@ func validateDevConfigFileValues(t *testing.T, manager *cfg_m.Manager) {
 	assert.NotNil(t, err)
 	assert.True(t, strings.Contains(err.Error(), "configuration value not found"))
 }
-
-func TestUnmarshalYamlData(t *testing.T) {
-	databaseMap := map[string]map[string]map[string]string{
-		"config": {
-			"database": {
-				"host":     "http://localhost",
-				"username": "user",
-				"password": "password",
-			},
-		},
-	}
-
-	configuration := make(map[string]string)
-	unmarshalYamlContent("", databaseMap, configuration)
-
-	assert.Equal(t, "http://localhost", configuration["config.database.host"])
-	assert.Equal(t, "user", configuration["config.database.username"])
-	assert.Equal(t, "password", configuration["config.database.password"])
-}
