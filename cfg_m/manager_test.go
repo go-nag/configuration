@@ -40,3 +40,36 @@ func TestManager_Get(t *testing.T) {
 		}
 	}
 }
+
+func TestManager_GetOrDefault(t *testing.T) {
+	var manager ConfigStringGetterWithDefault
+	t.Log("\tWhen using GetOrDefault")
+	{
+		t.Log("\t\tWhen value not present")
+		{
+			manager = &Manager{
+				make(map[string]string),
+			}
+			t.Logf("\t\t\tShould return default value")
+			{
+				cfgValue := manager.GetOrDefault("test.value", "default")
+
+				assert.Equal(t, "default", cfgValue)
+			}
+		}
+		t.Log("\t\tWhen value present")
+		{
+			testMap := make(map[string]string)
+			testMap["test.value"] = "some_value"
+			manager = &Manager{
+				testMap,
+			}
+			t.Log("\t\t\tShould return value")
+			{
+				cfgValue := manager.GetOrDefault("test.value", "default")
+
+				assert.Equal(t, "some_value", cfgValue)
+			}
+		}
+	}
+}
