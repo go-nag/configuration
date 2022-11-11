@@ -6,3 +6,5 @@ database:
 kafka:
   url: http://localhost:5555
   clientId: localApp
+
+something: wow
