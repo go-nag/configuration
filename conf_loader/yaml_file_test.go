@@ -136,7 +136,7 @@ func TestUnmarshalYamlData(t *testing.T) {
 	}
 
 	configuration := make(map[string]string)
-	unmarshalYamlContent("", databaseMap, &configuration)
+	unmarshalYamlContent("", databaseMap, configuration)
 
 	assert.Equal(t, "http://localhost", configuration["config.database.host"])
 	assert.Equal(t, "user", configuration["config.database.username"])
