@@ -2,14 +2,13 @@ package cfg_e
 
 import (
 	"fmt"
-	"github.com/pavleprica/configuration/conf_loader"
 	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
 )
 
 func TestGetEnv(t *testing.T) {
-	conf_loader.LoadEnvFile("../.env.example")
+	LoadEnvFile("../.env.example")
 	t.Log("When using GetEnv")
 	{
 		t.Log("\tWhen variable present")
@@ -37,7 +36,7 @@ func TestGetEnv(t *testing.T) {
 }
 
 func TestGetEnvOrDefault(t *testing.T) {
-	conf_loader.LoadEnvFile("../.env.example")
+	LoadEnvFile("../.env.example")
 	t.Log("When using GetEnvOrDefault")
 	{
 		t.Log("\tWhen variable present")
@@ -64,7 +63,7 @@ func TestGetEnvOrDefault(t *testing.T) {
 }
 
 func TestGetEnvInt(t *testing.T) {
-	conf_loader.LoadEnvFile("../.env.example")
+	LoadEnvFile("../.env.example")
 	t.Log("When using GetEnvInt")
 	{
 		t.Log("\tWhen variable present")
@@ -106,7 +105,7 @@ func TestGetEnvInt(t *testing.T) {
 }
 
 func TestGetEnvIntOrDefault(t *testing.T) {
-	conf_loader.LoadEnvFile("../.env.example")
+	LoadEnvFile("../.env.example")
 	t.Log("When using GetEnvIntOrDefault")
 	{
 		t.Log("\tWhen variable present")
@@ -143,7 +142,7 @@ func TestGetEnvIntOrDefault(t *testing.T) {
 }
 
 func TestGetEnvBool(t *testing.T) {
-	conf_loader.LoadEnvFile("../.env.example")
+	LoadEnvFile("../.env.example")
 	t.Log("When using GetEnvBool")
 	{
 		t.Log("\tWhen variable present")
@@ -185,7 +184,7 @@ func TestGetEnvBool(t *testing.T) {
 }
 
 func TestGetEnvBoolOrDefault(t *testing.T) {
-	conf_loader.LoadEnvFile("../.env.example")
+	LoadEnvFile("../.env.example")
 	t.Log("When using GetEnvBoolOrDefault")
 	{
 		t.Log("\tWhen variable present")

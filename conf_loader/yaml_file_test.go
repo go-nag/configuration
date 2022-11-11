@@ -1,7 +1,8 @@
 package conf_loader
 
 import (
-	"github.com/pavleprica/configuration/cfg_m"
+	"github.com/go-nag/configuration/cfg_e"
+	"github.com/go-nag/configuration/cfg_m"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"strings"
@@ -62,7 +63,7 @@ func TestLoadConfigFile(t *testing.T) {
 
 			t.Log("\t\tWhen file present")
 			{
-				LoadEnvFile("../config.dev.env")
+				cfg_e.LoadEnvFile("../config.dev.env")
 				t.Log("\t\t\tShould return cfg_m.Manager with accessible data that are populated from system environment")
 				{
 					manager, err := LoadConfigFile(environment)
