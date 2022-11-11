@@ -99,6 +99,10 @@ func validateLocalConfigFileValues(t *testing.T, manager *cfg_m.Manager) {
 	assert.Nil(t, err)
 	assert.Equal(t, "localApp", v)
 
+	v, err = manager.Get("something")
+	assert.Nil(t, err)
+	assert.Equal(t, "wow", v)
+
 	v, err = manager.Get("not.existing")
 	assert.True(t, len(v) == 0)
 	assert.NotNil(t, err)
@@ -125,6 +129,10 @@ func validateDevConfigFileValues(t *testing.T, manager *cfg_m.Manager) {
 	v, err = manager.Get("kafka.clientId")
 	assert.Nil(t, err)
 	assert.Equal(t, "dev_client", v)
+
+	v, err = manager.Get("something")
+	assert.Nil(t, err)
+	assert.Equal(t, "wow", v)
 
 	v, err = manager.Get("not.existing")
 	assert.True(t, len(v) == 0)
