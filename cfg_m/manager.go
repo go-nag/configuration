@@ -30,6 +30,12 @@ type Manager struct {
 	loadedConfiguration map[string]string
 }
 
+func NewManager(configuration map[string]string) *Manager {
+	return &Manager{
+		loadedConfiguration: configuration,
+	}
+}
+
 func (m *Manager) Get(configurationName string) (string, error) {
 	cfgValue, present := m.loadedConfiguration[configurationName]
 	if present {
