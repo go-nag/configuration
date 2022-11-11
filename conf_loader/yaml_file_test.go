@@ -3,11 +3,18 @@ package conf_loader
 import (
 	"github.com/pavleprica/configuration/cfg_m"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"strings"
 	"testing"
 )
 
 func TestLoadConfigFile(t *testing.T) {
+	// In testing the current working dir is different from actual executions. We want to tell our config loader
+	// to also check one package above if it's a test run.
+
+	os.Setenv(configTestRunKey, "true")
+	defer os.Setenv(configFileNotFound, "")
+
 	t.Log("When loading config-<environment>.yaml files")
 	{
 		t.Log("\tWhen loading config-local.yaml file")
