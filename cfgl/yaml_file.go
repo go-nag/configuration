@@ -1,10 +1,10 @@
-package conf_loader
+package cfgl
 
 import (
 	"errors"
 	"fmt"
-	"github.com/go-nag/configuration/cfg_e"
-	"github.com/go-nag/configuration/cfg_m"
+	"github.com/go-nag/configuration/cfge"
+	"github.com/go-nag/configuration/cfgm"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
@@ -18,7 +18,7 @@ var (
 
 // LoadConfigFile will take the `config-<environment>.yaml` file and
 // provide the configuration manager allowing access to configuration data.
-func LoadConfigFile(environment string) (*cfg_m.Manager, error) {
+func LoadConfigFile(environment string) (*cfgm.Manager, error) {
 	fmt.Printf("Loading config-%s.yaml\n", environment)
 
 	workDir, err := os.Getwd()
@@ -45,11 +45,11 @@ func LoadConfigFile(environment string) (*cfg_m.Manager, error) {
 	unmarshalYamlContent("", unmarshalledFileContent, configuration)
 	populateConfigurationWithEnvironmentVariables(configuration)
 
-	return cfg_m.NewManager(configuration), nil
+	return cfgm.NewManager(configuration), nil
 }
 
 func getConfigFilePath(environment string, workDir string) string {
-	if cfg_e.GetEnvBoolOrDefault(configTestRunKey, false) {
+	if cfge.GetEnvBoolOrDefault(configTestRunKey, false) {
 		return filepath.Join(workDir, "..", fmt.Sprintf("config-%s.yaml", environment))
 	} else {
 		return filepath.Join(workDir, fmt.Sprintf("config-%s.yaml", environment))
@@ -85,7 +85,7 @@ func populateConfigurationWithEnvironmentVariables(configuration map[string]stri
 	for k, v := range configuration {
 		if strings.HasPrefix(v, "${") && strings.HasSuffix(v, "}") {
 			envName := v[2 : len(v)-1]
-			configuration[k] = cfg_e.GetEnvOrDefault(envName, "")
+			configuration[k] = cfge.GetEnvOrDefault(envName, "")
 		}
 	}
 }

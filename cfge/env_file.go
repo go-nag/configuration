@@ -1,4 +1,4 @@
-package cfg_e
+package cfge
 
 import (
 	"fmt"

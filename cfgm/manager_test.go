@@ -1,4 +1,4 @@
-package cfg_m
+package cfgm
 
 import (
 	"github.com/stretchr/testify/assert"
