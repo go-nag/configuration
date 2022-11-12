@@ -8,6 +8,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -67,11 +68,14 @@ func unmarshalYamlContent(objectBase string, yamlContent interface{}, configurat
 				base = fmt.Sprintf("%s.%s", objectBase, k)
 			}
 
-			strValue, ok := v.(string)
-
-			if ok {
-				configuration[base] = strValue
-			} else {
+			switch res := v.(type) {
+			case string:
+				configuration[base] = res
+			case int:
+				configuration[base] = strconv.Itoa(res)
+			case bool:
+				configuration[base] = strconv.FormatBool(res)
+			default:
 				unmarshalYamlContent(base, v, configuration)
 			}
 		}

@@ -9,6 +9,6 @@ kafka:
 
 something: wow
 
-number: "7000"
+number: 7000
 
-boolean: "true"
+boolean: true
