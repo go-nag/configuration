@@ -8,6 +8,8 @@ Configuration is used to effectively manage environment configurations within Go
 
 ## Usage
 
+
+
 ### Bootstraping .env files
 
 In the event that you want to use a .env file to store variables, you can do so be using the `conf_loader` package.
@@ -100,3 +102,98 @@ variable := GetEnvBoolOrDefault("TEST_BOOL", false)
 // Prints the variable value
 fmt.Println(variable)
 ```
+
+## Loading configuration from environment files
+
+_Currently only supporting yaml files_
+
+### yaml
+
+The configuration for yaml files is divided between environments that your app runs in. 
+When loading up the configuration, the method expects a `environment string` parameter which
+indicates which file to choose. Let's say you have `local`, `dev`, `prod` as running environments.
+Following that you would have `config-local.yaml`, `config-dev.yaml` and `config-prod.yaml` files with
+different value configurations. See this [issue](https://github.com/go-nag/configuration/issues/1) for more information.
+
+In addition to that, because of sensitive values, and values changing per environment you can supply a template holder
+that will load up the value from the environment. For example `database_pw: ${DATABASE_PASSWORD}` will take the environment
+value of `DATABASE_PASSWORD` from your system. Making it convenient for deployments.
+
+#### Example files
+
+Example file for **local** config:
+```yaml
+database:
+  host: http://localhost:5042
+  username: user
+  password: my-secret-pw
+
+kafka:
+  url: http://localhost:5555
+  clientId: localApp
+
+something: wow
+
+number: 7000
+
+boolean: true
+```
+
+Example file for **dev** config:
+```yaml
+database:
+  host: http://remote-database:5042
+  username: ${DATABASE_USERNAME}
+  password: ${DATABASE_PASSWORD}
+
+kafka:
+  url: http://remote-kafka:5555
+  clientId: ${KAFKA_CLIENT_ID}
+
+something: wow
+
+number: 7000
+
+boolean: true
+```
+_In this example, the `${}` template values will be loaded from system environment._
+
+#### Using the loader
+
+To use the loader, just invoke `cfgl.LoadConfigFile("local")` or in dev case `cfgl.LoadConfigFile("dev")`.
+It in turn will return the `cfgm.Manager` [type](cfgm/manager.go). Which offers functions to get values. 
+In a bigger context an example would be:
+
+```go
+func main() {
+	manager, err := cfgl.LoadConfigFile("local")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	e := echo.New()
+
+	loggerEnabled, err := manager.Get("server.logging")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if loggerEnabled == "enabled" {
+		log.Println("Using logger")
+		e.Use(middleware.Logger())
+	}
+	e.Use(middleware.Recover())
+
+	manager.GetOrDefault("port", "9000")
+
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", manager.GetOrDefault("port", "9000"))))
+}
+```
+With the config file being `config-local.yaml`
+```yaml
+port: 8080
+server:
+  logging: enabled
+```
+
+Example project code can be found [here](https://github.com/go-nag/configuration-example).
