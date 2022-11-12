@@ -18,17 +18,17 @@ In the event that you want to use a .env file to store variables, you can do so 
 Example:
 ```go
 // This will load all variables from .env.example into environment variables 
-conf_loader.LoadEnvFile(".env.example")
+cfge.LoadEnvFile(".env.example")
 ```
 or you can rely on the default one `.env`
 ```go
 // This will load all variables from .env into environment variables
-conf_loader.LoadDefaultEnvFile()
+cfge.LoadDefaultEnvFile()
 ```
 
 ### GetEnv functions
 
-The package `conf` offers a set of methods for fetching environment variables. They are 
+The package `cfge` offers a set of methods for fetching environment variables. They are 
 generally split into two 'types'. The first one is to fetch the method or return an error if the variable
 is not there or the parsing was unsuccessful. The second one offers the default value that will be returned
 in case of an error.
