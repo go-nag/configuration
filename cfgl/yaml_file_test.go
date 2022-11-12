@@ -1,8 +1,8 @@
-package conf_loader
+package cfgl
 
 import (
-	"github.com/go-nag/configuration/cfg_e"
-	"github.com/go-nag/configuration/cfg_m"
+	"github.com/go-nag/configuration/cfge"
+	"github.com/go-nag/configuration/cfgm"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"strings"
@@ -35,7 +35,7 @@ func TestLoadConfigFile(t *testing.T) {
 
 			t.Log("\t\tWhen file present")
 			{
-				t.Log("\t\t\tShould return cfg_m.Manager with accessible data")
+				t.Log("\t\t\tShould return cfgm.Manager with accessible data")
 				{
 					manager, err := LoadConfigFile(environment)
 
@@ -63,8 +63,8 @@ func TestLoadConfigFile(t *testing.T) {
 
 			t.Log("\t\tWhen file present")
 			{
-				cfg_e.LoadEnvFile("../config.dev.env")
-				t.Log("\t\t\tShould return cfg_m.Manager with accessible data that are populated from system environment")
+				cfge.LoadEnvFile("../config.dev.env")
+				t.Log("\t\t\tShould return cfgm.Manager with accessible data that are populated from system environment")
 				{
 					manager, err := LoadConfigFile(environment)
 
@@ -78,7 +78,7 @@ func TestLoadConfigFile(t *testing.T) {
 	}
 }
 
-func validateLocalConfigFileValues(t *testing.T, manager *cfg_m.Manager) {
+func validateLocalConfigFileValues(t *testing.T, manager *cfgm.Manager) {
 	v, err := manager.Get("database.host")
 	assert.Nil(t, err)
 	assert.Equal(t, "http://localhost:5042", v)
@@ -117,7 +117,7 @@ func validateLocalConfigFileValues(t *testing.T, manager *cfg_m.Manager) {
 	assert.True(t, strings.Contains(err.Error(), "configuration value not found"))
 }
 
-func validateDevConfigFileValues(t *testing.T, manager *cfg_m.Manager) {
+func validateDevConfigFileValues(t *testing.T, manager *cfgm.Manager) {
 	v, err := manager.Get("database.host")
 	assert.Nil(t, err)
 	assert.Equal(t, "http://remote-database:5042", v)

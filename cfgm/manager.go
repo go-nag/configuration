@@ -1,4 +1,4 @@
-package cfg_m
+package cfgm
 
 import (
 	"errors"
