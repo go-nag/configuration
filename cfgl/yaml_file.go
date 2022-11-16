@@ -28,7 +28,7 @@ func LoadConfigFile(environment string) (*cfgm.Manager, error) {
 	}
 
 	configFilePath := getConfigFilePath(environment, workDir)
-	fileContent, err := os.ReadFile(configFilePath)
+	fileContent, err := readFile(configFilePath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil, errors.New(fmt.Sprintf("%s - %s", configFileNotFound, configFilePath))
@@ -47,6 +47,18 @@ func LoadConfigFile(environment string) (*cfgm.Manager, error) {
 	populateConfigurationWithEnvironmentVariables(configuration)
 
 	return cfgm.NewManager(configuration), nil
+}
+
+func readFile(configFilePath string) ([]byte, error) {
+	fileContent, err := os.ReadFile(configFilePath)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) && strings.HasSuffix(configFilePath, ".yaml") {
+			alternativeYamlExtensionPath := configFilePath[:strings.Index(configFilePath, ".yaml")] + ".yml"
+			return readFile(alternativeYamlExtensionPath)
+		}
+		return nil, err
+	}
+	return fileContent, nil
 }
 
 func getConfigFilePath(environment string, workDir string) string {
