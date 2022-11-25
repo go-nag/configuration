@@ -1,5 +1,6 @@
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/pavleprica/configuration)
 ![test build](https://github.com/pavleprica/configuration/actions/workflows/test.yml/badge.svg)
+[![codecov](https://codecov.io/gh/go-nag/configuration/branch/master/graph/badge.svg?token=C2YYJG5U3C)](https://codecov.io/gh/go-nag/configuration)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/pavleprica/configuration)
 
 
