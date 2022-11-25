@@ -6,6 +6,10 @@ clean-prepare:
 test:
 	@go test -v ./...
 
+.PHONY: test-cov
+test-cov:
+	@go test -covermode=atomic -coverprofile=coverage.out ./...
+
 .PHONY: fmt
 fmt:
 	@go fmt ./...
