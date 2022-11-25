@@ -24,4 +24,7 @@ jobs:
       - name: Run tests
         run: |
           make clean-prepare
-          make test
+          make test-cov
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
