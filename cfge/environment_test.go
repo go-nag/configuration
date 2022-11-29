@@ -3,9 +3,64 @@ package cfge
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"strings"
 	"testing"
 )
+
+func TestLoadDefaultEnvFile(t *testing.T) {
+	t.Cleanup(func() {
+		os.Remove(".env")
+		os.Setenv("TESTING", "")
+	})
+
+	// Removing the test .env file
+	f, err := os.Create(".env")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer f.Close()
+
+	_, err = f.WriteString("TESTING=some_value")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	LoadDefaultEnvFile()
+
+	v, err := GetEnv("TESTING")
+
+	assert.Nil(t, err)
+	assert.Equal(t, "some_value", v)
+}
+
+func TestLoadEnvFile(t *testing.T) {
+	t.Cleanup(func() {
+		os.Remove(".env")
+		os.Setenv("TESTING_ANOTHER", "")
+	})
+
+	// Removing the test .envtest file
+	f, err := os.Create(".env")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer f.Close()
+
+	_, err = f.WriteString("TESTING_ANOTHER=some_value")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	LoadEnvFile(".env")
+
+	v, err := GetEnv("TESTING_ANOTHER")
+
+	assert.Nil(t, err)
+	assert.Equal(t, "some_value", v)
+}
 
 func TestGetEnv(t *testing.T) {
 	LoadEnvFile("../.env.example")
