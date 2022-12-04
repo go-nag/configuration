@@ -1,8 +1,7 @@
-package cfgl
+package cfgm
 
 import (
 	"github.com/go-nag/configuration/cfge"
-	"github.com/go-nag/configuration/cfgm"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"strings"
@@ -78,7 +77,7 @@ func TestLoadConfigFile(t *testing.T) {
 	}
 }
 
-func validateLocalConfigFileValues(t *testing.T, manager *cfgm.Manager) {
+func validateLocalConfigFileValues(t *testing.T, manager *Manager) {
 	v, err := manager.Get("database.host")
 	assert.Nil(t, err)
 	assert.Equal(t, "http://localhost:5042", v)
@@ -117,7 +116,7 @@ func validateLocalConfigFileValues(t *testing.T, manager *cfgm.Manager) {
 	assert.True(t, strings.Contains(err.Error(), "configuration value not found"))
 }
 
-func validateDevConfigFileValues(t *testing.T, manager *cfgm.Manager) {
+func validateDevConfigFileValues(t *testing.T, manager *Manager) {
 	v, err := manager.Get("database.host")
 	assert.Nil(t, err)
 	assert.Equal(t, "http://remote-database:5042", v)

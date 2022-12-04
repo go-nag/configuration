@@ -1,10 +1,9 @@
-package cfgl
+package cfgm
 
 import (
 	"errors"
 	"fmt"
 	"github.com/go-nag/configuration/cfge"
-	"github.com/go-nag/configuration/cfgm"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
@@ -19,7 +18,7 @@ var (
 
 // LoadConfigFile will take the `config-<environment>.yaml` file and
 // provide the configuration manager allowing access to configuration data.
-func LoadConfigFile(environment string) (*cfgm.Manager, error) {
+func LoadConfigFile(environment string) (*Manager, error) {
 	fmt.Printf("Loading config-%s.yaml\n", environment)
 
 	workDir, err := os.Getwd()
@@ -46,7 +45,7 @@ func LoadConfigFile(environment string) (*cfgm.Manager, error) {
 	unmarshalYamlContent("", unmarshalledFileContent, configuration)
 	populateConfigurationWithEnvironmentVariables(configuration)
 
-	return cfgm.NewManager(configuration), nil
+	return newManager(configuration), nil
 }
 
 func readFile(configFilePath string) ([]byte, error) {
