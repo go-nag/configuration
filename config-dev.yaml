@@ -12,3 +12,9 @@ something: wow
 number: 7000
 
 boolean: true
+
+array:
+  value:
+    - something0
+    - something1
+    - something2
