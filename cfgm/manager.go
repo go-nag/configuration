@@ -49,10 +49,10 @@ type configValue struct {
 // Manager is used as a loaded configuration store.
 // It provides a set of methods
 type Manager struct {
-	loadedConfiguration map[string]string
+	loadedConfiguration map[string]configValue
 }
 
-func NewManager(configuration map[string]string) *Manager {
+func newManager(configuration map[string]configValue) *Manager {
 	return &Manager{
 		loadedConfiguration: configuration,
 	}
@@ -60,8 +60,8 @@ func NewManager(configuration map[string]string) *Manager {
 
 func (m *Manager) Get(configurationName string) (string, error) {
 	cfgValue, present := m.loadedConfiguration[configurationName]
-	if present {
-		return cfgValue, nil
+	if present && cfgValue.cfgType == str {
+		return cfgValue.value, nil
 	} else {
 		return "", errors.New(fmt.Sprintf("%s - %s", configurationName, configurationValueNotFoundMessage))
 	}
@@ -69,8 +69,8 @@ func (m *Manager) Get(configurationName string) (string, error) {
 
 func (m *Manager) GetOrDefault(configurationName string, defaultValue string) string {
 	cfgValue, present := m.loadedConfiguration[configurationName]
-	if present {
-		return cfgValue
+	if present && cfgValue.cfgType == str {
+		return cfgValue.value
 	} else {
 		return defaultValue
 	}

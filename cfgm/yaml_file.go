@@ -41,7 +41,7 @@ func LoadConfigFile(environment string) (*Manager, error) {
 		return nil, err
 	}
 
-	configuration := make(map[string]string)
+	configuration := make(map[string]configValue)
 	unmarshalYamlContent("", unmarshalledFileContent, configuration)
 	populateConfigurationWithEnvironmentVariables(configuration)
 
@@ -68,7 +68,7 @@ func getConfigFilePath(environment string, workDir string) string {
 	}
 }
 
-func unmarshalYamlContent(objectBase string, yamlContent interface{}, configuration map[string]string) {
+func unmarshalYamlContent(objectBase string, yamlContent interface{}, configuration map[string]configValue) {
 	switch value := yamlContent.(type) {
 	case map[string]interface{}:
 		for k, v := range value {
@@ -81,11 +81,20 @@ func unmarshalYamlContent(objectBase string, yamlContent interface{}, configurat
 
 			switch res := v.(type) {
 			case string:
-				configuration[base] = res
+				configuration[base] = configValue{
+					value:   res,
+					cfgType: str,
+				}
 			case int:
-				configuration[base] = strconv.Itoa(res)
+				configuration[base] = configValue{
+					value:   strconv.Itoa(res),
+					cfgType: str,
+				}
 			case bool:
-				configuration[base] = strconv.FormatBool(res)
+				configuration[base] = configValue{
+					value:   strconv.FormatBool(res),
+					cfgType: str,
+				}
 			default:
 				unmarshalYamlContent(base, v, configuration)
 			}
@@ -96,11 +105,12 @@ func unmarshalYamlContent(objectBase string, yamlContent interface{}, configurat
 	}
 }
 
-func populateConfigurationWithEnvironmentVariables(configuration map[string]string) {
+func populateConfigurationWithEnvironmentVariables(configuration map[string]configValue) {
 	for k, v := range configuration {
-		if strings.HasPrefix(v, "${") && strings.HasSuffix(v, "}") {
-			envName := v[2 : len(v)-1]
-			configuration[k] = cfge.GetEnvOrDefault(envName, "")
+		if v.cfgType == str && strings.HasPrefix(v.value, "${") && strings.HasSuffix(v.value, "}") {
+			envName := v.value[2 : len(v.value)-1]
+			cfgValue := configuration[k]
+			cfgValue.value = cfge.GetEnvOrDefault(envName, "")
 		}
 	}
 }
