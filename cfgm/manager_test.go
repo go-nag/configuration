@@ -42,6 +42,24 @@ func TestManager_Get(t *testing.T) {
 				assert.Equal(t, "some_value", cfgValue)
 			}
 		}
+		t.Log("\tWhen accessing wrong value type")
+		{
+			testMap := make(map[string]configValue)
+			testMap["test.value"] = configValue{
+				value:   "some_value",
+				cfgType: arr,
+			}
+			manager = &Manager{
+				testMap,
+			}
+			t.Logf("\t\tShould return %s\n", invalidValueType)
+			{
+				cfgValue, err := manager.Get("some_value")
+				assert.Nil(t, cfgValue)
+				assert.NotNil(t, err)
+				assert.Equal(t, invalidValueType, err.Error())
+			}
+		}
 	}
 }
 
@@ -78,5 +96,23 @@ func TestManager_GetOrDefault(t *testing.T) {
 				assert.Equal(t, "some_value", cfgValue)
 			}
 		}
+		t.Log("\tWhen accessing wrong value type")
+		{
+			testMap := make(map[string]configValue)
+			testMap["test.value"] = configValue{
+				value:   "some_value",
+				cfgType: arr,
+			}
+			manager = &Manager{
+				testMap,
+			}
+			t.Log("\t\tShould return default value")
+			{
+				cfgValue := manager.GetOrDefault("some_value", "default")
+				assert.NotNil(t, cfgValue)
+				assert.Equal(t, "default", cfgValue)
+			}
+		}
 	}
 }
+
