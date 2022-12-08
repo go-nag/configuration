@@ -54,7 +54,7 @@ func TestManager_Get(t *testing.T) {
 			}
 			t.Logf("\t\tShould return %s\n", invalidValueType)
 			{
-				cfgValue, err := manager.Get("some_value")
+				cfgValue, err := manager.Get("test.value")
 				assert.Nil(t, cfgValue)
 				assert.NotNil(t, err)
 				assert.Equal(t, invalidValueType, err.Error())
@@ -108,7 +108,7 @@ func TestManager_GetOrDefault(t *testing.T) {
 			}
 			t.Log("\t\tShould return default value")
 			{
-				cfgValue := manager.GetOrDefault("some_value", "default")
+				cfgValue := manager.GetOrDefault("test.value", "default")
 				assert.NotNil(t, cfgValue)
 				assert.Equal(t, "default", cfgValue)
 			}
