@@ -116,3 +116,55 @@ func TestManager_GetOrDefault(t *testing.T) {
 	}
 }
 
+func TestManager_GetArr(t *testing.T) {
+	var manager ConfigArrayGetter
+	t.Log("\tWhen using GetArr")
+	{
+		t.Log("\t\tWhen value not present")
+		{
+			manager = &Manager{
+				make(map[string]configValue),
+			}
+			t.Log("\t\t\tShould return empty array")
+			{
+				arr := manager.GetArr("array.value")
+				assert.Equal(t, 0, len(arr))
+			}
+		}
+		t.Log("\t\tWhen value present")
+		{
+			testMap := make(map[string]configValue)
+			testMap["array.value"] = configValue{
+				value:   "something0;something1;something2;something3",
+				cfgType: arr,
+			}
+			manager = &Manager{
+				testMap,
+			}
+			t.Log("\t\t\tShould return array value")
+			{
+				arr := manager.GetArr("array.value")
+				for i, value := range arr {
+					assert.Equal(t, fmt.Sprintf("something%d", i), value)
+				}
+			}
+		}
+		t.Log("\tWhen accessing wrong value type")
+		{
+			testMap := make(map[string]configValue)
+			testMap["array.value"] = configValue{
+				value:   "something0;something1;something2;something3",
+				cfgType: str,
+			}
+			manager = &Manager{
+				testMap,
+			}
+			t.Log("\t\tShould return empty array")
+			{
+				arr := manager.GetArr("array.value")
+
+				assert.Equal(t, 0, len(arr))
+			}
+		}
+	}
+}
