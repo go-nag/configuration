@@ -5,8 +5,10 @@ import (
 	"fmt"
 )
 
+// error list
 var (
 	configurationValueNotFoundMessage = "configuration value not found"
+	invalidValueType                  = "invalid value type"
 )
 
 // ConfigStringGetter is responsible for allowing getting of loaded configuration from the implemented types.
