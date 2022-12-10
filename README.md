@@ -161,19 +161,20 @@ _In this example, the `${}` template values will be loaded from system environme
 
 #### Using the loader
 
-To use the loader, just invoke `cfgl.LoadConfigFile("local")` or in dev case `cfgl.LoadConfigFile("dev")`.
+To use the loader, just invoke `cfgm.LoadConfigFile("local")` or in dev case `cfgm.LoadConfigFile("dev")`.
 It in turn will return the `cfgm.Manager` [type](cfgm/manager.go). Which offers functions to get values. 
 In a bigger context an example would be:
 
 ```go
 func main() {
-	manager, err := cfgl.LoadConfigFile("local")
+	manager, err := cfgm.LoadConfigFile("local")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	e := echo.New()
 
+	// Single value
 	loggerEnabled, err := manager.Get("server.logging")
 	if err != nil {
 		log.Fatal(err)
@@ -195,6 +196,20 @@ With the config file being `config-local.yaml`
 port: 8080
 server:
   logging: enabled
+```
+
+**Arrays** can be loaded as well.
+```go
+func main() {
+    manager, err := cfgm.LoadConfigFile("local")
+    if err != nil {
+    log.Fatal(err)
+    }
+    
+    // Loads array, if encounters error, returns empty array.
+    arrayConfig := manager.GetArr("array.value")
+    
+}
 ```
 
 Example project code can be found [here](https://github.com/go-nag/configuration-example).
