@@ -64,10 +64,10 @@ func (m *Manager) Get(configurationName string) (string, error) {
 	cfgValue, present := m.loadedConfiguration[configurationName]
 	if present && cfgValue.cfgType == str {
 		return cfgValue.value, nil
-	} else if cfgValue.cfgType == str {
-		return "", errors.New(fmt.Sprintf("%s - %s", configurationName, configurationValueNotFoundMessage))
-	} else {
+	} else if present && cfgValue.cfgType != str {
 		return "", errors.New(invalidValueType)
+	} else {
+		return "", errors.New(fmt.Sprintf("%s - %s", configurationName, configurationValueNotFoundMessage))
 	}
 }
 
