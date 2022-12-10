@@ -3,6 +3,7 @@ package cfgm
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 // error list
@@ -68,6 +69,15 @@ func (m *Manager) Get(configurationName string) (string, error) {
 		return "", errors.New(invalidValueType)
 	} else {
 		return "", errors.New(fmt.Sprintf("%s - %s", configurationName, configurationValueNotFoundMessage))
+	}
+}
+
+func (m *Manager) GetArr(configurationName string) []string {
+	cfgValue, present := m.loadedConfiguration[configurationName]
+	if present && cfgValue.cfgType == arr {
+		return strings.Split(cfgValue.value, ";")
+	} else {
+		return make([]string, 0)
 	}
 }
 
