@@ -70,6 +70,7 @@ func getConfigFilePath(environment string, workDir string) string {
 
 func unmarshalYamlContent(objectBase string, yamlContent interface{}, configuration map[string]*configValue) {
 	switch value := yamlContent.(type) {
+	// Single values
 	case map[string]interface{}:
 		for k, v := range value {
 			var base string
@@ -98,6 +99,29 @@ func unmarshalYamlContent(objectBase string, yamlContent interface{}, configurat
 			default:
 				unmarshalYamlContent(base, v, configuration)
 			}
+		}
+	// Array
+	case []interface{}:
+		var builder strings.Builder
+
+		for _, v := range value {
+			switch res := v.(type) {
+			case string:
+				builder.WriteString(res)
+			case int:
+				builder.WriteString(strconv.Itoa(res))
+			case bool:
+				builder.WriteString(strconv.FormatBool(res))
+			default:
+				fmt.Println("Unsupported type")
+				fmt.Println(res)
+			}
+
+			builder.WriteString(";")
+		}
+		configuration[objectBase] = &configValue{
+			value:   builder.String(),
+			cfgType: arr,
 		}
 	default:
 		fmt.Println("Unsupported type")
