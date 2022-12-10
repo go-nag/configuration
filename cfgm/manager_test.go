@@ -14,7 +14,7 @@ func TestManager_Get(t *testing.T) {
 		t.Log("\t\tWhen value not present")
 		{
 			manager = &Manager{
-				make(map[string]configValue),
+				make(map[string]*configValue),
 			}
 			t.Logf("\t\t\tShould return %s error", configurationValueNotFoundMessage)
 			{
@@ -27,8 +27,8 @@ func TestManager_Get(t *testing.T) {
 		}
 		t.Log("\t\tWhen value present")
 		{
-			testMap := make(map[string]configValue)
-			testMap["test.value"] = configValue{
+			testMap := make(map[string]*configValue)
+			testMap["test.value"] = &configValue{
 				value:   "some_value",
 				cfgType: str,
 			}
@@ -44,8 +44,8 @@ func TestManager_Get(t *testing.T) {
 		}
 		t.Log("\tWhen accessing wrong value type")
 		{
-			testMap := make(map[string]configValue)
-			testMap["test.value"] = configValue{
+			testMap := make(map[string]*configValue)
+			testMap["test.value"] = &configValue{
 				value:   "some_value",
 				cfgType: arr,
 			}
@@ -55,7 +55,7 @@ func TestManager_Get(t *testing.T) {
 			t.Logf("\t\tShould return %s\n", invalidValueType)
 			{
 				cfgValue, err := manager.Get("test.value")
-				assert.Nil(t, cfgValue)
+				assert.Equal(t, "", cfgValue)
 				assert.NotNil(t, err)
 				assert.Equal(t, invalidValueType, err.Error())
 			}
@@ -70,7 +70,7 @@ func TestManager_GetOrDefault(t *testing.T) {
 		t.Log("\t\tWhen value not present")
 		{
 			manager = &Manager{
-				make(map[string]configValue),
+				make(map[string]*configValue),
 			}
 			t.Logf("\t\t\tShould return default value")
 			{
@@ -81,8 +81,8 @@ func TestManager_GetOrDefault(t *testing.T) {
 		}
 		t.Log("\t\tWhen value present")
 		{
-			testMap := make(map[string]configValue)
-			testMap["test.value"] = configValue{
+			testMap := make(map[string]*configValue)
+			testMap["test.value"] = &configValue{
 				value:   "some_value",
 				cfgType: str,
 			}
@@ -98,8 +98,8 @@ func TestManager_GetOrDefault(t *testing.T) {
 		}
 		t.Log("\tWhen accessing wrong value type")
 		{
-			testMap := make(map[string]configValue)
-			testMap["test.value"] = configValue{
+			testMap := make(map[string]*configValue)
+			testMap["test.value"] = &configValue{
 				value:   "some_value",
 				cfgType: arr,
 			}
@@ -123,7 +123,7 @@ func TestManager_GetArr(t *testing.T) {
 		t.Log("\t\tWhen value not present")
 		{
 			manager = &Manager{
-				make(map[string]configValue),
+				make(map[string]*configValue),
 			}
 			t.Log("\t\t\tShould return empty array")
 			{
@@ -133,8 +133,8 @@ func TestManager_GetArr(t *testing.T) {
 		}
 		t.Log("\t\tWhen value present")
 		{
-			testMap := make(map[string]configValue)
-			testMap["array.value"] = configValue{
+			testMap := make(map[string]*configValue)
+			testMap["array.value"] = &configValue{
 				value:   "something0;something1;something2;something3",
 				cfgType: arr,
 			}
@@ -151,8 +151,8 @@ func TestManager_GetArr(t *testing.T) {
 		}
 		t.Log("\tWhen accessing wrong value type")
 		{
-			testMap := make(map[string]configValue)
-			testMap["array.value"] = configValue{
+			testMap := make(map[string]*configValue)
+			testMap["array.value"] = &configValue{
 				value:   "something0;something1;something2;something3",
 				cfgType: str,
 			}

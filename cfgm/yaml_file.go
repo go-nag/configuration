@@ -41,7 +41,7 @@ func LoadConfigFile(environment string) (*Manager, error) {
 		return nil, err
 	}
 
-	configuration := make(map[string]configValue)
+	configuration := make(map[string]*configValue)
 	unmarshalYamlContent("", unmarshalledFileContent, configuration)
 	populateConfigurationWithEnvironmentVariables(configuration)
 
@@ -68,7 +68,7 @@ func getConfigFilePath(environment string, workDir string) string {
 	}
 }
 
-func unmarshalYamlContent(objectBase string, yamlContent interface{}, configuration map[string]configValue) {
+func unmarshalYamlContent(objectBase string, yamlContent interface{}, configuration map[string]*configValue) {
 	switch value := yamlContent.(type) {
 	case map[string]interface{}:
 		for k, v := range value {
@@ -81,17 +81,17 @@ func unmarshalYamlContent(objectBase string, yamlContent interface{}, configurat
 
 			switch res := v.(type) {
 			case string:
-				configuration[base] = configValue{
+				configuration[base] = &configValue{
 					value:   res,
 					cfgType: str,
 				}
 			case int:
-				configuration[base] = configValue{
+				configuration[base] = &configValue{
 					value:   strconv.Itoa(res),
 					cfgType: str,
 				}
 			case bool:
-				configuration[base] = configValue{
+				configuration[base] = &configValue{
 					value:   strconv.FormatBool(res),
 					cfgType: str,
 				}
@@ -105,7 +105,7 @@ func unmarshalYamlContent(objectBase string, yamlContent interface{}, configurat
 	}
 }
 
-func populateConfigurationWithEnvironmentVariables(configuration map[string]configValue) {
+func populateConfigurationWithEnvironmentVariables(configuration map[string]*configValue) {
 	for k, v := range configuration {
 		if v.cfgType == str && strings.HasPrefix(v.value, "${") && strings.HasSuffix(v.value, "}") {
 			envName := v.value[2 : len(v.value)-1]

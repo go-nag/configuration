@@ -51,10 +51,10 @@ type configValue struct {
 // Manager is used as a loaded configuration store.
 // It provides a set of methods
 type Manager struct {
-	loadedConfiguration map[string]configValue
+	loadedConfiguration map[string]*configValue
 }
 
-func newManager(configuration map[string]configValue) *Manager {
+func newManager(configuration map[string]*configValue) *Manager {
 	return &Manager{
 		loadedConfiguration: configuration,
 	}
