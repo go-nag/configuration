@@ -48,6 +48,29 @@ func LoadConfigFile(environment string) (*Manager, error) {
 	return newManager(configuration), nil
 }
 
+// LoadConfigFileWithPath will take the path `config-<environment>.yaml` file and
+// provide the configuration manager allowing access to configuration data.
+func LoadConfigFileWithPath(pathToConfigFile string) (*Manager, error) {
+	return nil, errors.New("not implemented")
+}
+
+// LoadConfigFileWithDirScanning will try to locate the `config-<environment>.yaml` file and
+// provide the configuration manager allowing access to configuration data.
+// We provide it with the environment name, and the number of dirs to go upwards.
+// In the event we are running a test file, we want to check one upward package as well.
+// Example:
+/*
+project/
+- config-local.yml
+- package/
+--  some_file.go
+--  some_file_test.go
+*/
+// See issue https://github.com/go-nag/configuration/issues/6
+func LoadConfigFileWithDirScanning(pathToConfigFile string) (*Manager, error) {
+	return nil, errors.New("not implemented")
+}
+
 func readFile(configFilePath string) ([]byte, error) {
 	fileContent, err := os.ReadFile(configFilePath)
 	if err != nil {
