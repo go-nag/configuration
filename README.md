@@ -161,6 +161,8 @@ _In this example, the `${}` template values will be loaded from system environme
 
 #### Using the loader
 
+`cfgm.LoadConfigFile()`
+
 To use the loader, just invoke `cfgm.LoadConfigFile("local")` or in dev case `cfgm.LoadConfigFile("dev")`.
 It in turn will return the `cfgm.Manager` [type](cfgm/manager.go). Which offers functions to get values. 
 In a bigger context an example would be:
@@ -209,6 +211,40 @@ func main() {
     // Loads array, if encounters error, returns empty array.
     arrayConfig := manager.GetArr("array.value")
     
+}
+```
+
+`cfgm.LoadConfigFileWithPath()`
+
+This loader is doing the same job as `cfgm.LoadConfigFile()` but it doesn't look via the `environment` variable, rather just takes
+the custom path provided.
+It in turn will return the `cfgm.Manager` [type](cfgm/manager.go). Which offers functions to get values.
+In a bigger context an example would be:
+
+```go
+func main() {
+	manager, err := cfgm.LoadConfigFileWithPath("/Users/someuser/yourproject/config.yaml")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	e := echo.New()
+
+	// Single value
+	loggerEnabled, err := manager.Get("server.logging")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if loggerEnabled == "enabled" {
+		log.Println("Using logger")
+		e.Use(middleware.Logger())
+	}
+	e.Use(middleware.Recover())
+
+	manager.GetOrDefault("port", "9000")
+
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", manager.GetOrDefault("port", "9000"))))
 }
 ```
 
