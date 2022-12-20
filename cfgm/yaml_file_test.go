@@ -4,17 +4,12 @@ import (
 	"github.com/go-nag/configuration/cfge"
 	"github.com/stretchr/testify/assert"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
 
 func TestLoadConfigFile(t *testing.T) {
-	// In testing the current working dir is different from actual executions. We want to tell our config loader
-	// to also check one package above if it's a test run.
-
-	os.Setenv(configTestRunKey, "true")
-	defer os.Setenv(configFileNotFound, "")
-
 	t.Log("When loading config-<environment>.yaml files")
 	{
 		t.Log("\tWhen loading config-local.yaml file")
@@ -66,6 +61,71 @@ func TestLoadConfigFile(t *testing.T) {
 				t.Log("\t\t\tShould return cfgm.Manager with accessible data that are populated from system environment")
 				{
 					manager, err := LoadConfigFile(environment)
+
+					assert.Nil(t, err)
+					assert.NotNil(t, manager)
+
+					validateDevConfigFileValues(t, manager)
+				}
+			}
+		}
+	}
+}
+
+func TestLoadConfigFileWithPath(t *testing.T) {
+	currentDir, _ := os.Getwd()
+	basePath := filepath.Join(currentDir, "..")
+	t.Logf("When loading %s/config-<environment>.yaml files", basePath)
+	{
+		t.Logf("\tWhen loading %s/config-local.yaml file", basePath)
+		{
+			filePath := filepath.Join(basePath, "config-local.yaml")
+			t.Log("\t\tWhen file not present")
+			{
+				t.Logf("\t\t\tShould return %s for environment %s not found", configFileNotFound, filePath)
+				{
+					manager, err := LoadConfigFileWithPath(filePath + "wrong")
+
+					assert.Nil(t, manager)
+					assert.NotNil(t, err)
+					assert.True(t, strings.Contains(err.Error(), configFileNotFound))
+				}
+			}
+
+			t.Log("\t\tWhen file present")
+			{
+				t.Log("\t\t\tShould return cfgm.Manager with accessible data")
+				{
+					manager, err := LoadConfigFileWithPath(filePath)
+
+					assert.Nil(t, err)
+					assert.NotNil(t, manager)
+
+					validateLocalConfigFileValues(t, manager)
+				}
+			}
+		}
+		t.Logf("\tWhen loading %s/config-dev.yaml file", basePath)
+		{
+			filePath := filepath.Join(basePath, "config-dev.yaml")
+			t.Log("\t\tWhen file not present")
+			{
+				t.Logf("\t\t\tShould return %s for environment %s not found", configFileNotFound, filePath)
+				{
+					manager, err := LoadConfigFileWithPath(filePath + "wrong")
+
+					assert.Nil(t, manager)
+					assert.NotNil(t, err)
+					assert.True(t, strings.Contains(err.Error(), configFileNotFound))
+				}
+			}
+
+			t.Log("\t\tWhen file present")
+			{
+				cfge.LoadEnvFile("../config.dev.env")
+				t.Log("\t\t\tShould return cfgm.Manager with accessible data that are populated from system environment")
+				{
+					manager, err := LoadConfigFileWithPath(filePath)
 
 					assert.Nil(t, err)
 					assert.NotNil(t, manager)

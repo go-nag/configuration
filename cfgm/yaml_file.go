@@ -2,6 +2,7 @@ package cfgm
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"github.com/go-nag/configuration/cfge"
 	"gopkg.in/yaml.v3"
@@ -35,6 +36,26 @@ func LoadConfigFile(environment string) (*Manager, error) {
 		return nil, err
 	}
 
+	return loadConfigFile(err, fileContent)
+}
+
+// LoadConfigFileWithPath will take the path `config-<environment>.yaml` file and
+// provide the configuration manager allowing access to configuration data.
+func LoadConfigFileWithPath(pathToConfigFile string) (*Manager, error) {
+	fmt.Printf("Loading %s\n", pathToConfigFile)
+
+	fileContent, err := readFile(pathToConfigFile)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil, errors.New(fmt.Sprintf("%s - %s", configFileNotFound, pathToConfigFile))
+		}
+		return nil, err
+	}
+
+	return loadConfigFile(err, fileContent)
+}
+
+func loadConfigFile(err error, fileContent []byte) (*Manager, error) {
 	var unmarshalledFileContent interface{}
 	err = yaml.Unmarshal(fileContent, &unmarshalledFileContent)
 	if err != nil {
@@ -46,29 +67,6 @@ func LoadConfigFile(environment string) (*Manager, error) {
 	populateConfigurationWithEnvironmentVariables(configuration)
 
 	return newManager(configuration), nil
-}
-
-// LoadConfigFileWithPath will take the path `config-<environment>.yaml` file and
-// provide the configuration manager allowing access to configuration data.
-func LoadConfigFileWithPath(pathToConfigFile string) (*Manager, error) {
-	return nil, errors.New("not implemented")
-}
-
-// LoadConfigFileWithDirScanning will try to locate the `config-<environment>.yaml` file and
-// provide the configuration manager allowing access to configuration data.
-// We provide it with the environment name, and the number of dirs to go upwards.
-// In the event we are running a test file, we want to check one upward package as well.
-// Example:
-/*
-project/
-- config-local.yml
-- package/
---  some_file.go
---  some_file_test.go
-*/
-// See issue https://github.com/go-nag/configuration/issues/6
-func LoadConfigFileWithDirScanning(pathToConfigFile string) (*Manager, error) {
-	return nil, errors.New("not implemented")
 }
 
 func readFile(configFilePath string) ([]byte, error) {
@@ -84,11 +82,15 @@ func readFile(configFilePath string) ([]byte, error) {
 }
 
 func getConfigFilePath(environment string, workDir string) string {
-	if cfge.GetEnvBoolOrDefault(configTestRunKey, false) {
+	if isInTests() {
 		return filepath.Join(workDir, "..", fmt.Sprintf("config-%s.yaml", environment))
 	} else {
 		return filepath.Join(workDir, fmt.Sprintf("config-%s.yaml", environment))
 	}
+}
+
+func isInTests() bool {
+	return flag.Lookup("test.v") != nil
 }
 
 func unmarshalYamlContent(objectBase string, yamlContent interface{}, configuration map[string]*configValue) {
