@@ -2,22 +2,13 @@
 	"name": "Go",
 	"image": "mcr.microsoft.com/devcontainers/go:0-1.19",
 	"features": {
-		"ghcr.io/devcontainers/features/aws-cli:1": {},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
 		"ghcr.io/devcontainers/features/git:1": {},
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/devcontainers/features/go:1": {},
-		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
-		"ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {},
 		"ghcr.io/devcontainers-contrib/features/bash-command:1": {},
 		"ghcr.io/devcontainers-contrib/features/curl-apt-get:1": {},
-		"ghcr.io/devcontainers/features/terraform:1": {},
-		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {},
 		"ghcr.io/eitsupi/devcontainer-features/jq-likes:1": {},
 		"ghcr.io/guiyomh/features/vim:0": {},
-		"ghcr.io/rjfmachado/devcontainer-features/cloud-native:1": {},
-		"ghcr.io/rio/features/k9s:1": {},
-		"ghcr.io/withfig/features/fig:1": {},
 		"ghcr.io/eliises/devcontainer-features/devcontainers-cli:1": {}
 	}
 
