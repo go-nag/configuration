@@ -13,7 +13,7 @@ Configuration is used to effectively manage environment configurations within Go
 
 ### Bootstraping .env files
 
-In the event that you want to use a .env file to store variables, you can do so be using the `conf_loader` package.
+In the event that you want to use a .env file to store variables, you can do so be using the `cfge` package.
 
 
 Example:
