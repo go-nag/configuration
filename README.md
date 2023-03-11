@@ -164,7 +164,7 @@ _In this example, the `${}` template values will be loaded from system environme
 `cfgm.LoadConfigFile()`
 
 To use the loader, just invoke `cfgm.LoadConfigFile("local")` or in dev case `cfgm.LoadConfigFile("dev")`.
-It in turn will return the `cfgm.Manager` [type](cfgm/manager.go). Which offers functions to get values. 
+It in turn will return the `cfgm.Manager` [type](src/cfgm/manager.go). Which offers functions to get values. 
 In a bigger context an example would be:
 
 ```go
@@ -218,7 +218,7 @@ func main() {
 
 This loader is doing the same job as `cfgm.LoadConfigFile()` but it doesn't look via the `environment` variable, rather just takes
 the custom path provided.
-It in turn will return the `cfgm.Manager` [type](cfgm/manager.go). Which offers functions to get values.
+It in turn will return the `cfgm.Manager` [type](src/cfgm/manager.go). Which offers functions to get values.
 In a bigger context an example would be:
 
 ```go

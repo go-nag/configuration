@@ -1,7 +1,7 @@
 package cfgm
 
 import (
-	"github.com/go-nag/configuration/cfge"
+	"github.com/go-nag/configuration/src/cfge"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"

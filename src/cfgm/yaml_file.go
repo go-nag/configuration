@@ -4,7 +4,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/go-nag/configuration/cfge"
+	"github.com/go-nag/configuration/src/cfge"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
